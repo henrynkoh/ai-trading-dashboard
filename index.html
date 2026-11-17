@@ -3,20 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>10-Agent AI Swarm Morning Sniper | 실시간 매매 & 슬랙 관제 센터</title>
+  <title>10-Agent AI Swarm Morning Sniper | TradingView & iPhone Slack Live</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { darkMode: 'class' }</script>
   <style>
     @keyframes pulse-slow { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
     .animate-pulse-slow { animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-    .glass-panel { background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .glass-panel { background: rgba(17, 24, 39, 0.88); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
     .agent-active { border-color: #10b981 !important; box-shadow: 0 0 15px rgba(16, 185, 129, 0.25); }
+    
     /* iPhone Mockup Frame */
     .iphone-frame {
-      width: 340px;
+      width: 350px;
       height: 680px;
       border-radius: 46px;
       border: 10px solid #1f2937;
-      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.1);
       position: relative;
       overflow: hidden;
       background: #1a1d21;
@@ -34,10 +36,10 @@
     }
   </style>
 </head>
-<body class="bg-[#0b0f19] text-gray-100 font-sans min-h-screen p-4 md:p-6 antialiased selection:bg-emerald-500 selection:text-white">
+<body class="bg-[#0b0f19] text-gray-100 font-sans min-h-screen p-3 md:p-6 antialiased selection:bg-emerald-500 selection:text-white">
 
   <!-- Top Header Bar -->
-  <header class="glass-panel rounded-2xl p-4 md:p-5 mb-6 shadow-2xl flex flex-wrap items-center justify-between gap-4 border border-gray-800">
+  <header class="glass-panel rounded-2xl p-4 md:p-5 mb-5 shadow-2xl flex flex-wrap items-center justify-between gap-4 border border-gray-800">
     <div class="flex items-center gap-3">
       <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-emerald-500 to-cyan-500 flex items-center justify-center text-2xl shadow-lg shadow-emerald-500/20">
         🤖
@@ -45,174 +47,194 @@
       <div>
         <div class="flex items-center gap-2">
           <h1 class="text-xl md:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-            10-Agent AI Swarm <span class="text-emerald-400 font-mono text-lg font-semibold">Sniper Bot</span>
+            10-Agent AI Swarm <span class="text-emerald-400 font-mono text-lg font-semibold">Morning Sniper</span>
           </h1>
           <span class="px-2.5 py-0.5 text-xs font-medium rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> LIVE DEMO
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> TRADINGVIEW & SLACK LIVE
           </span>
         </div>
-        <p class="text-xs text-gray-400 mt-0.5">iPhone Slack 승인 연동 & Alpaca Paper Broker 관제 대시보드</p>
+        <p class="text-xs text-gray-400 mt-0.5">NYSE·NASDAQ 정규장 개장 30분 집중 스나이퍼 관제 시스템</p>
       </div>
     </div>
 
-    <!-- Live Status Indicators -->
-    <div class="flex items-center gap-4 flex-wrap">
+    <!-- Live Status Indicators & Controls -->
+    <div class="flex items-center gap-3 flex-wrap">
+      <!-- Sound Toggle -->
+      <button onclick="toggleSound()" id="btnSoundToggle" class="px-3 py-1.5 rounded-xl bg-gray-900 border border-gray-800 text-xs flex items-center gap-1.5 text-gray-300 hover:text-white">
+        <span id="soundIcon">🔊</span> <span id="soundText">사운드 ON</span>
+      </button>
+
       <!-- Mode Toggle -->
       <div class="bg-gray-800/80 p-1 rounded-xl flex items-center border border-gray-700/60 text-xs">
         <button id="viewModePro" onclick="setMode('pro')" class="px-3 py-1.5 rounded-lg bg-emerald-500 text-white font-medium transition shadow">
-          📊 프로 트레이더 뷰
+          📊 프로 뷰
         </button>
         <button id="viewModeEasy" onclick="setMode('easy')" class="px-3 py-1.5 rounded-lg text-gray-400 hover:text-white font-medium transition">
           🧸 쉬운 눈높이 뷰
         </button>
       </div>
 
-      <!-- Slack Status -->
-      <div class="px-3.5 py-2 rounded-xl bg-gray-900 border border-gray-800 flex items-center gap-2 text-xs">
-        <div class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></div>
-        <div>
-          <div class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Slack Bot</div>
-          <div class="font-mono text-emerald-300 font-bold">#trading-alerts CONNECTED</div>
-        </div>
+      <!-- Broker Pill -->
+      <div class="px-3 py-1.5 rounded-xl bg-gray-900 border border-gray-800 flex items-center gap-2 text-xs">
+        <div class="w-2 h-2 rounded-full bg-emerald-400"></div>
+        <span class="font-mono text-emerald-300 font-bold">ALPACA PAPER</span>
       </div>
 
-      <!-- Simulation Controller -->
-      <button onclick="startLiveDemo()" id="btnPlayDemo" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-bold text-xs flex items-center gap-2 shadow-lg shadow-emerald-500/25 transition active:scale-95">
-        <span>▶ 실시간 매매 & 슬랙 승인 시연</span>
+      <!-- Interactive Trigger Button -->
+      <button onclick="triggerLiveSignal()" id="btnPlayDemo" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-bold text-xs flex items-center gap-2 shadow-lg shadow-emerald-500/25 transition active:scale-95">
+        <span>⚡ 매매신호 발송 & 슬랙 승인 시연</span>
       </button>
     </div>
   </header>
 
+  <!-- Market Timer & Cutoff Warning Banner -->
+  <div class="glass-panel rounded-2xl p-4 mb-5 border border-gray-800/80 flex flex-wrap items-center justify-between gap-4">
+    <div class="flex items-center gap-3">
+      <div class="p-2.5 rounded-xl bg-amber-500/10 text-amber-400 text-xl border border-amber-500/20">
+        ⏰
+      </div>
+      <div>
+        <div class="text-xs text-gray-400 font-medium">뉴욕 정규장 스나이퍼 타이머 (EST)</div>
+        <div class="text-base md:text-lg font-mono font-bold text-white flex items-center gap-2">
+          <span id="clockDisplay">09:36:20 EST</span>
+          <span id="marketPhaseBadge" class="text-xs px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+            ACTIVE (09:30~10:00)
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="flex-1 max-w-md w-full">
+      <div class="flex justify-between text-xs text-gray-400 mb-1 font-mono">
+        <span>09:30 개장</span>
+        <span class="text-amber-400 font-semibold" id="timeRemainingText">10:00 컷오프까지 23분 40초</span>
+        <span>10:00 컷오프</span>
+      </div>
+      <div class="w-full bg-gray-800 rounded-full h-2.5 overflow-hidden">
+        <div id="sessionProgress" class="bg-gradient-to-r from-emerald-500 via-teal-400 to-amber-400 h-2.5 rounded-full transition-all duration-500" style="width: 22%"></div>
+      </div>
+    </div>
+
+    <div class="text-right text-xs">
+      <span class="text-gray-400">10:00 AM 원칙:</span>
+      <span class="text-rose-400 font-bold ml-1">신규진입 완전차단 (Hard Cutoff)</span>
+    </div>
+  </div>
+
   <!-- Easy Mode Explainer Box -->
-  <div id="easyModeBox" class="hidden glass-panel rounded-2xl p-5 mb-6 border-2 border-emerald-500/30 bg-emerald-950/20">
+  <div id="easyModeBox" class="hidden glass-panel rounded-2xl p-5 mb-5 border-2 border-emerald-500/30 bg-emerald-950/20">
     <h3 class="text-base font-bold text-emerald-300 flex items-center gap-2 mb-2">
-      <span>🧸</span> 아이폰 슬랙 승인 3단계 요약!
+      <span>🧸</span> 30초 만에 이해하는 트레이딩뷰 & 슬랙 실시간 협업!
     </h3>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs text-gray-300">
       <div class="bg-gray-900/80 p-3 rounded-xl border border-gray-800">
-        <div class="text-lg mb-1">🔔 1. 슬랙 무전기 띵동!</div>
-        <p class="text-gray-400 leading-relaxed">컴퓨터를 안 봐도 스마트폰 주머니 속에서 슬랙 알림음이 울리며 84% 확신 카드 도착!</p>
+        <div class="text-base mb-1 font-bold text-emerald-400">📈 1. 트레이딩뷰 차트 분석</div>
+        <p class="text-gray-400 leading-relaxed">트레이딩뷰에서 5분봉 고가와 기관 평단가(VWAP)를 뚫는 순간을 10개 AI가 실시간으로 포착합니다.</p>
       </div>
       <div class="bg-gray-900/80 p-3 rounded-xl border border-gray-800">
-        <div class="text-lg mb-1">👆 2. 대장의 원터치 승인</div>
-        <p class="text-gray-400 leading-relaxed">진입가와 손절가 안전벨트를 확인하고 슬랙 화면에서 [승인] 버튼을 톡 누르면 끝!</p>
+        <div class="text-base mb-1 font-bold text-cyan-400">📱 2. 아이폰 슬랙 띵동-!</div>
+        <p class="text-gray-400 leading-relaxed">AI들이 84점 확신을 얻으면 대장(CEO)의 아이폰 슬랙으로 알림음과 함께 결재판이 날아갑니다.</p>
       </div>
       <div class="bg-gray-900/80 p-3 rounded-xl border border-gray-800">
-        <div class="text-lg mb-1">🦙 3. 알파카 체결 영수증</div>
-        <p class="text-gray-400 leading-relaxed">0.1초 뒤 "체결 완료 + 익절 풍선/손절 낙하산 장착" 영수증이 슬랙에 도착합니다.</p>
+        <div class="text-base mb-1 font-bold text-amber-400">🎒 3. 2중 안전벨트 매수</div>
+        <p class="text-gray-400 leading-relaxed">대장이 [승인] 버튼을 누르면 알파카에 익절선(풍선)과 손절선(낙하산)이 자동으로 걸리며 체결!</p>
       </div>
     </div>
   </div>
 
-  <!-- Main Grid: Swarm Agents + iPhone Slack Live Mockup -->
-  <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+  <!-- Main Grid Layout: Chart + Agents + iPhone Slack -->
+  <div class="grid grid-cols-1 xl:grid-cols-12 gap-5 items-start">
 
-    <!-- Left 7 Cols: Swarm Consensus Engine & Logs -->
-    <div class="xl:col-span-7 space-y-6">
+    <!-- Left Column: TradingView Chart + 10 Agents Matrix + Logs (7 Cols) -->
+    <div class="xl:col-span-7 space-y-5">
 
-      <!-- Swarm Consensus Card -->
-      <div class="glass-panel rounded-2xl p-5 border border-gray-800">
-        <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+      <!-- TradingView Interactive Real-Time Chart Widget Card -->
+      <div class="glass-panel rounded-2xl p-4 border border-gray-800 shadow-2xl">
+        <div class="flex items-center justify-between pb-3 mb-3 border-b border-gray-800">
+          <div class="flex items-center gap-2">
+            <span class="text-lg">📈</span>
+            <span class="text-sm font-bold text-white">TradingView 실시간 인터랙티브 차트</span>
+            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-xs font-mono font-bold">NASDAQ:NVDA (5분봉)</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs text-gray-400 font-mono">
+            <span>VWAP</span> • <span>RSI</span> • <span>Volume</span>
+          </div>
+        </div>
+
+        <!-- Embedded TradingView Advanced Chart -->
+        <div class="w-full rounded-xl overflow-hidden border border-gray-800/80" style="height: 420px;">
+          <iframe 
+            src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_widget&symbol=NASDAQ%3ANVDA&interval=5&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=111827&studies=VWAP%40tv-basicstudies%2CRSI%40tv-basicstudies%2CVolume%40tv-basicstudies&theme=dark&style=1&timezone=America%2FNew_York&studies_overrides=%7B%7D&overrides=%7B%7D&enabled_features=%5B%5D&disabled_features=%5B%5D&locale=en" 
+            style="width: 100%; height: 100%; border: none;">
+          </iframe>
+        </div>
+      </div>
+
+      <!-- 10-Agent AI Swarm Consensus Card -->
+      <div class="glass-panel rounded-2xl p-5 border border-gray-800 shadow-xl">
+        <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
           <div>
-            <h2 class="text-base font-bold text-white flex items-center gap-2">
+            <h2 class="text-sm font-bold text-white flex items-center gap-2">
               <span>🏛️</span> 10인 AI 에이전트 실시간 토론 (Consensus Engine)
             </h2>
-            <p class="text-xs text-gray-400">타겟 종목: <span class="text-emerald-400 font-bold font-mono text-sm">NVDA (NVIDIA)</span> | 현재가: <span class="font-mono text-white font-semibold">$159.10</span></p>
+            <p class="text-xs text-gray-400">타겟: <span class="text-emerald-400 font-bold font-mono">NVDA (NVIDIA)</span> | 진입가: <span class="text-white font-mono font-semibold">$159.10</span></p>
           </div>
           <div class="text-right">
             <span class="text-xs text-gray-400">합의 점수:</span>
-            <span id="consensusScoreText" class="text-xl font-bold font-mono text-emerald-400 ml-1">84%</span>
+            <span id="consensusScoreText" class="text-lg font-bold font-mono text-emerald-400 ml-1">84%</span>
             <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold ml-1">STRONG BUY</span>
           </div>
         </div>
 
         <!-- Voting Progress Bar -->
-        <div class="w-full bg-gray-800 rounded-full h-3 overflow-hidden mb-4 flex">
+        <div class="w-full bg-gray-800 rounded-full h-2.5 overflow-hidden mb-3 flex">
           <div id="voteBarBuy" class="bg-emerald-500 h-full transition-all duration-700" style="width: 80%" title="매수 찬성 (8표)"></div>
           <div id="voteBarNeutral" class="bg-amber-500 h-full transition-all duration-700" style="width: 10%" title="중립 (1표)"></div>
-          <div id="voteBarSell" class="bg-rose-500 h-full transition-all duration-700" style="width: 10%" title="매도/보류 (1표)"></div>
+          <div id="voteBarSell" class="bg-rose-500 h-full transition-all duration-700" style="width: 10%" title="보류 (1표)"></div>
         </div>
 
-        <!-- 10 Agents Matrix -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="agentsGrid">
-          <div id="cardAgent1" class="p-2.5 rounded-xl bg-gray-900/90 border border-gray-800 agent-active text-xs">
-            <div class="flex justify-between font-semibold text-emerald-400 mb-0.5">
-              <span>1. RSI 스페셜리스트</span>
-              <span class="font-mono text-[10px] bg-emerald-500/20 px-1.5 py-0.5 rounded">BUY (0.85)</span>
-            </div>
-            <p class="text-[11px] text-gray-300">5분봉 과매도 터치 후 반등 다이버전스 감지.</p>
+        <!-- Compact Agents Matrix -->
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs" id="agentsGrid">
+          <div id="cardAgent1" class="p-2 rounded-lg bg-gray-900/90 border border-gray-800 agent-active">
+            <div class="font-bold text-emerald-400 text-[11px]">1. RSI</div>
+            <div class="text-[10px] text-gray-300">다이버전스 반등</div>
           </div>
-
-          <div id="cardAgent2" class="p-2.5 rounded-xl bg-gray-900/90 border border-gray-800 agent-active text-xs">
-            <div class="flex justify-between font-semibold text-emerald-400 mb-0.5">
-              <span>2. MACD 스페셜리스트</span>
-              <span class="font-mono text-[10px] bg-emerald-500/20 px-1.5 py-0.5 rounded">BUY (0.80)</span>
-            </div>
-            <p class="text-[11px] text-gray-300">시그널선 골든크로스 직전 임계값 도달.</p>
+          <div id="cardAgent2" class="p-2 rounded-lg bg-gray-900/90 border border-gray-800 agent-active">
+            <div class="font-bold text-emerald-400 text-[11px]">2. MACD</div>
+            <div class="text-[10px] text-gray-300">골든크로스 임계</div>
           </div>
-
-          <div id="cardAgent3" class="p-2.5 rounded-xl bg-gray-900/90 border border-gray-800 agent-active text-xs">
-            <div class="flex justify-between font-semibold text-emerald-400 mb-0.5">
-              <span>3. 볼린저 밴드</span>
-              <span class="font-mono text-[10px] bg-emerald-500/20 px-1.5 py-0.5 rounded">BUY (0.78)</span>
-            </div>
-            <p class="text-[11px] text-gray-300">하단 밴드 휩소 후 복귀, 상방 확장 개시.</p>
+          <div id="cardAgent3" class="p-2 rounded-lg bg-gray-900/90 border border-gray-800 agent-active">
+            <div class="font-bold text-emerald-400 text-[11px]">3. 볼린저밴드</div>
+            <div class="text-[10px] text-gray-300">상방 확장 개시</div>
           </div>
-
-          <div id="cardAgent4" class="p-2.5 rounded-xl bg-gray-900/90 border border-gray-800 agent-active text-xs">
-            <div class="flex justify-between font-semibold text-emerald-400 mb-0.5">
-              <span>4. 거래량 & 수급</span>
-              <span class="font-mono text-[10px] bg-emerald-500/20 px-1.5 py-0.5 rounded">BUY (0.90)</span>
-            </div>
-            <p class="text-[11px] text-gray-300">상대거래량 RVOL 3.4배 폭발. 기관 평단가 돌파.</p>
+          <div id="cardAgent4" class="p-2 rounded-lg bg-gray-900/90 border border-gray-800 agent-active">
+            <div class="font-bold text-emerald-400 text-[11px]">4. 수급 (RVOL)</div>
+            <div class="text-[10px] text-gray-300">거래량 3.4배 폭발</div>
           </div>
-
-          <div id="cardAgent5" class="p-2.5 rounded-xl bg-gray-900/90 border border-gray-800 agent-active text-xs">
-            <div class="flex justify-between font-semibold text-emerald-400 mb-0.5">
-              <span>5. 프라이스 액션 (ORB)</span>
-              <span class="font-mono text-[10px] bg-emerald-500/20 px-1.5 py-0.5 rounded">BUY (0.88)</span>
-            </div>
-            <p class="text-[11px] text-gray-300">오프닝 5분봉 고가($158.80) 돌파 확정.</p>
+          <div id="cardAgent5" class="p-2 rounded-lg bg-gray-900/90 border border-gray-800 agent-active">
+            <div class="font-bold text-emerald-400 text-[11px]">5. 5분봉 ORB</div>
+            <div class="text-[10px] text-gray-300">고가($158.8) 돌파</div>
           </div>
-
-          <div id="cardAgent6" class="p-2.5 rounded-xl bg-gray-900/90 border border-gray-800 agent-active text-xs">
-            <div class="flex justify-between font-semibold text-emerald-400 mb-0.5">
-              <span>6. 모멘텀 속도</span>
-              <span class="font-mono text-[10px] bg-emerald-500/20 px-1.5 py-0.5 rounded">BUY (0.82)</span>
-            </div>
-            <p class="text-[11px] text-gray-300">호가 체결 속도 2.2배 가속, 매수 델타 +68%.</p>
+          <div id="cardAgent6" class="p-2 rounded-lg bg-gray-900/90 border border-gray-800 agent-active">
+            <div class="font-bold text-emerald-400 text-[11px]">6. 모멘텀 속도</div>
+            <div class="text-[10px] text-gray-300">체결속도 2.2배</div>
           </div>
-
-          <div id="cardAgent7" class="p-2.5 rounded-xl bg-gray-900/90 border border-gray-800 text-xs">
-            <div class="flex justify-between font-semibold text-cyan-400 mb-0.5">
-              <span>7. 뉴스 촉매제</span>
-              <span class="font-mono text-[10px] bg-cyan-500/20 px-1.5 py-0.5 rounded">NEUTRAL (0.65)</span>
-            </div>
-            <p class="text-[11px] text-gray-300">서버 출하 호조 뉴스 확인. 유상증자 위험 없음.</p>
+          <div id="cardAgent7" class="p-2 rounded-lg bg-gray-900/90 border border-gray-800">
+            <div class="font-bold text-cyan-400 text-[11px]">7. 뉴스 촉매제</div>
+            <div class="text-[10px] text-gray-300">서버 출하 호조</div>
           </div>
-
-          <div id="cardAgent8" class="p-2.5 rounded-xl bg-gray-900/90 border border-gray-800 agent-active text-xs">
-            <div class="flex justify-between font-semibold text-emerald-400 mb-0.5">
-              <span>8. 매수 변호인</span>
-              <span class="font-mono text-[10px] bg-emerald-500/20 px-1.5 py-0.5 rounded">BUY (0.92)</span>
-            </div>
-            <p class="text-[11px] text-gray-300">기술 지표 5개 일치 + 수급 동반 (승률 74%).</p>
+          <div id="cardAgent8" class="p-2 rounded-lg bg-gray-900/90 border border-gray-800 agent-active">
+            <div class="font-bold text-emerald-400 text-[11px]">8. 매수 변호인</div>
+            <div class="text-[10px] text-gray-300">승률 74% 패턴</div>
           </div>
-
-          <div id="cardAgent9" class="p-2.5 rounded-xl bg-gray-900/90 border border-gray-800 text-xs">
-            <div class="flex justify-between font-semibold text-rose-400 mb-0.5">
-              <span>9. 악마의 대변인</span>
-              <span class="font-mono text-[10px] bg-rose-500/20 px-1.5 py-0.5 rounded">HOLD (0.45)</span>
-            </div>
-            <p class="text-[11px] text-gray-300">상단 $162 매물벽 존재 ➔ 엄격한 손익비 설정.</p>
+          <div id="cardAgent9" class="p-2 rounded-lg bg-gray-900/90 border border-gray-800">
+            <div class="font-bold text-rose-400 text-[11px]">9. 리스크 검사</div>
+            <div class="text-[10px] text-gray-300">$162 저항 주의</div>
           </div>
-
-          <div id="cardAgent10" class="p-2.5 rounded-xl bg-gray-900/90 border border-gray-800 agent-active text-xs">
-            <div class="flex justify-between font-semibold text-emerald-400 mb-0.5">
-              <span>10. 스웜 총괄 조율사</span>
-              <span class="font-mono text-[10px] bg-emerald-500/20 px-1.5 py-0.5 rounded">PROPOSE (0.84)</span>
-            </div>
-            <p class="text-[11px] text-gray-300">가중 점수 0.84 ➔ 아이폰 슬랙 결재 전송!</p>
+          <div id="cardAgent10" class="p-2 rounded-lg bg-gray-900/90 border border-gray-800 agent-active">
+            <div class="font-bold text-emerald-400 text-[11px]">10. 스웜 조율사</div>
+            <div class="text-[10px] text-gray-300">슬랙 결재 발송!</div>
           </div>
         </div>
       </div>
@@ -223,24 +245,24 @@
           <span class="flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-emerald-400"></span> 실시간 이벤트 & 로그 콘솔
           </span>
-          <span class="text-[10px]">Alpaca & Slack Synced</span>
+          <span class="text-[10px]">TradingView & Slack Synced</span>
         </div>
-        <div id="terminalLogs" class="space-y-1 text-gray-300 max-h-36 overflow-y-auto pr-1">
+        <div id="terminalLogs" class="space-y-1 text-gray-300 max-h-32 overflow-y-auto pr-1">
           <div class="text-gray-500">[09:30:00 EST] 🔔 마켓 개장 알람. 30분 스나이퍼 윈도우 시작.</div>
-          <div class="text-cyan-400">[09:34:20 EST] ⚡ NVDA 상대거래량(RVOL 3.4x) 급증 ➔ 10개 에이전트 투표 개시.</div>
-          <div class="text-emerald-400 font-semibold">[09:35:10 EST] 📱 아이폰 슬랙(#trading-alerts)으로 결재 푸시 알림 전송 완료!</div>
+          <div class="text-cyan-400">[09:34:20 EST] 📈 TradingView 5분봉 고가 돌파 + RVOL 3.4배 감지.</div>
+          <div class="text-emerald-400 font-semibold">[09:35:10 EST] 📱 아이폰 슬랙(#general)으로 결재 푸시 알림 전송 완료!</div>
         </div>
       </div>
 
     </div>
 
-    <!-- Right 5 Cols: Realistic iPhone Slack Screen Mockup -->
+    <!-- Right Column: Realistic iPhone Slack Device Mockup (5 Cols) -->
     <div class="xl:col-span-5 flex flex-col items-center">
-      <div class="text-center mb-3">
+      <div class="text-center mb-2">
         <span class="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center justify-center gap-1.5">
-          <span>📱</span> 실제 아이폰 슬랙(Slack) 화면
+          <span>📱</span> 실제 아이폰 슬랙(Slack) 승인 화면
         </span>
-        <span class="text-[11px] text-emerald-400">CEO 스마트폰에 도착하는 실시간 승인 카드</span>
+        <span class="text-[11px] text-emerald-400">신호 발송 시 "띵동-!" 소리와 함께 결재 카드 팝업</span>
       </div>
 
       <!-- iPhone Device Container -->
@@ -253,7 +275,7 @@
           <span>09:35</span>
           <div class="flex items-center gap-1.5 text-[10px]">
             <span>5G</span>
-            <span>100% 🔋</span>
+            <span>92% 🔋</span>
           </div>
         </div>
 
@@ -262,7 +284,7 @@
           <div class="flex items-center gap-2">
             <div class="text-gray-400 font-bold text-sm">#</div>
             <div>
-              <div class="text-xs font-bold text-white leading-tight">trading-alerts</div>
+              <div class="text-xs font-bold text-white leading-tight">general</div>
               <div class="text-[9px] text-gray-400">10-Agent Swarm • Alpaca Live</div>
             </div>
           </div>
@@ -281,7 +303,7 @@
               <div class="font-bold text-white flex justify-between">
                 <span>Slack • 지금</span>
               </div>
-              <div class="text-emerald-300 font-medium truncate">🎯 [매수 타점 감지] NVDA 확신도 84%</div>
+              <div class="text-emerald-300 font-medium truncate">🎯 @channel [매수 타점 감지] NVDA 확신도 84%</div>
             </div>
           </div>
 
@@ -292,7 +314,7 @@
             </div>
             <div class="flex-1">
               <div class="flex items-center gap-1.5 mb-1">
-                <span class="text-xs font-bold text-white">AI Swarm Trading Bot</span>
+                <span class="text-xs font-bold text-white">Demo App</span>
                 <span class="text-[9px] bg-gray-700 px-1 rounded text-gray-300 font-mono">APP</span>
                 <span class="text-[9px] text-gray-500">09:35 AM</span>
               </div>
@@ -325,22 +347,22 @@
                 <!-- Drivers -->
                 <div class="text-[10px] space-y-1 text-gray-300">
                   <div class="text-emerald-300 font-semibold">🟢 매수 핵심 요인 (Agent 8):</div>
-                  <div class="text-gray-400 leading-tight pl-1">• 거래량 3.4배 폭발 + 5분봉 VWAP 지지 돌파</div>
+                  <div class="text-gray-400 leading-tight pl-1">• 거래량 3.4배 폭발 + 5분봉 VWAP 돌파 지지</div>
                   <div class="text-rose-300 font-semibold mt-1">🔴 리스크 검증 (Agent 9):</div>
-                  <div class="text-gray-400 leading-tight pl-1">• $162 저항선 존재 ➔ 1:2.5 손익비 엄격 적용</div>
+                  <div class="text-gray-400 leading-tight pl-1">• $162 저항선 고려 ➔ 1:2.5 손익비 엄격 적용</div>
                 </div>
 
                 <!-- Slack Interactive Buttons -->
                 <div id="slackActionButtons" class="pt-2 flex gap-1.5">
                   <button onclick="approveFromSlack()" class="flex-1 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] shadow transition active:scale-95 flex items-center justify-center gap-1">
-                    <span>✅ 승인 (주문 전송)</span>
+                    <span>✅ 승인 (알파카 전송)</span>
                   </button>
                   <button onclick="rejectFromSlack()" class="px-2.5 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-300 font-medium text-[11px] transition">
                     거절
                   </button>
                 </div>
 
-                <!-- Slack Approved Receipt (Hidden by default) -->
+                <!-- Slack Approved Receipt -->
                 <div id="slackApprovedReceipt" class="hidden pt-2 border-t border-gray-700/60 text-[10px] text-emerald-400 font-mono">
                   ✅ CEO 모바일 승인 완료 ➔ 알파카 브래킷 주문 전송 완료!
                 </div>
@@ -349,7 +371,7 @@
             </div>
           </div>
 
-          <!-- Order Execution Follow-up Card (After approval) -->
+          <!-- Order Execution Follow-up Card -->
           <div id="slackOrderReceiptCard" class="hidden flex items-start gap-2 pt-1">
             <div class="w-7 h-7 rounded-lg bg-cyan-600 flex items-center justify-center text-xs shadow">
               🦙
@@ -379,10 +401,57 @@
   </div>
 
   <script>
-    let currentMode = 'pro';
+    let soundEnabled = true;
+
+    // Web Audio API Synthesizer for Crisp Slack Chime ("Ding-Dong!")
+    function playDingDongSound() {
+      if (!soundEnabled) return;
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        // First Tone (Ding: C5 - 523.25 Hz)
+        const osc1 = audioCtx.createOscillator();
+        const gain1 = audioCtx.createGain();
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+        gain1.gain.setValueAtTime(0.35, audioCtx.currentTime);
+        gain1.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+        osc1.connect(gain1);
+        gain1.connect(audioCtx.destination);
+        osc1.start(audioCtx.currentTime);
+        osc1.stop(audioCtx.currentTime + 0.5);
+
+        // Second Tone (Dong: G5 - 783.99 Hz)
+        const osc2 = audioCtx.createOscillator();
+        const gain2 = audioCtx.createGain();
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.15);
+        gain2.gain.setValueAtTime(0.35, audioCtx.currentTime + 0.15);
+        gain2.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.8);
+        osc2.connect(gain2);
+        gain2.connect(audioCtx.destination);
+        osc2.start(audioCtx.currentTime + 0.15);
+        osc2.stop(audioCtx.currentTime + 0.8);
+      } catch (e) {
+        console.log("AudioContext playback:", e);
+      }
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      const icon = document.getElementById('soundIcon');
+      const text = document.getElementById('soundText');
+      if (soundEnabled) {
+        icon.textContent = '🔊';
+        text.textContent = '사운드 ON';
+        playDingDongSound();
+      } else {
+        icon.textContent = '🔇';
+        text.textContent = '사운드 OFF';
+      }
+    }
 
     function setMode(mode) {
-      currentMode = mode;
       const easyBox = document.getElementById('easyModeBox');
       const btnPro = document.getElementById('viewModePro');
       const btnEasy = document.getElementById('viewModeEasy');
@@ -423,23 +492,29 @@
       addLog('🛑 [CEO 거절] 아이폰 슬랙에서 주문을 보류/취소했습니다.', 'text-rose-400');
     }
 
-    function startLiveDemo() {
+    function triggerLiveSignal() {
       const btn = document.getElementById('btnPlayDemo');
       btn.disabled = true;
-      btn.innerHTML = '<span>⏳ 시연 진행 중...</span>';
+      btn.innerHTML = '<span>⏳ 매매신호 발송 중...</span>';
 
-      addLog('🚀 [실시간 시연] 10개 AI 투표 ➔ 슬랙 푸시 알림 ➔ CEO 모바일 승인 시퀀스 재생.', 'text-emerald-400 font-bold');
+      addLog('🚀 [매매신호 시연] TradingView 차트 5분봉 돌파 ➔ 10개 AI 투표 ➔ 슬랙 전송.', 'text-emerald-400 font-bold');
 
       setTimeout(() => {
-        addLog('📱 [슬랙 알림] 스마트폰에 "🎯 NVDA 확신도 84%" 푸시 도착!', 'text-cyan-300 font-bold');
+        addLog('📈 [TradingView] NVDA 거래량 3.4배 폭증 & 5분봉 고가($158.80) 상방 돌파!', 'text-cyan-300 font-bold');
+      }, 1000);
+
+      setTimeout(() => {
+        // Play Ding Dong Sound!
+        playDingDongSound();
+        addLog('🔔 [슬랙 알림] "띵동-!" 아이폰 슬랙(#general)으로 결재 푸시 알림 도착!', 'text-emerald-300 font-bold');
         document.getElementById('slackPushToast').classList.remove('hidden');
-      }, 1500);
+      }, 2500);
 
       setTimeout(() => {
         approveFromSlack();
         btn.disabled = false;
-        btn.innerHTML = '<span>🔄 시연 다시 보기</span>';
-      }, 3500);
+        btn.innerHTML = '<span>⚡ 신호 발송 다시 보기</span>';
+      }, 4500);
     }
   </script>
 </body>
